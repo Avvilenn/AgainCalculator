@@ -6,14 +6,19 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView textView;
+    TextView textView, result;
 
-    Button clear, bracketRight, bracketLeft, percentage, divide, add, subtract, multiply, equal, minusValue;
+    Button clear, bracketRight, bracketLeft, percentage, divide, add, subtract, multiply, equal;
 
     Button one, two, three, four, five, six, seven, eight, nine, point, zero ;
+
+    Boolean clearResult = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = (TextView)findViewById(R.id.textView1);
+        result = (TextView)findViewById(R.id.textView2);
 
         clear = (Button)findViewById(R.id.buttonClearText);
         bracketRight = (Button)findViewById(R.id.buttonBracketRight);
@@ -35,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         subtract = (Button)findViewById(R.id.buttonSubtraction);
         multiply = (Button)findViewById(R.id.buttonMultiply);
         equal = (Button)findViewById(R.id.buttonEqual);
-        minusValue = (Button)findViewById(R.id.buttonMinusValue);
+
 
         one = (Button)findViewById(R.id.button1);
         two = (Button)findViewById(R.id.button2);
@@ -54,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 textView.setText(null);
+                result.setText(null);
             }
         });
 
@@ -61,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         bracketRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + ")");
 
@@ -70,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         bracketLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "(");
 
@@ -79,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         percentage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "%");
 
@@ -89,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         divide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "/");
 
@@ -99,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "+");
             }
@@ -108,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         subtract.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "-");
 
@@ -118,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         multiply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "*");
 
@@ -128,23 +142,107 @@ public class MainActivity extends AppCompatActivity {
         equal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String orgString = textView.getText().toString();
 
+                result.setText(findValueInBraces(orgString));
+                textView.setText(null);
+                clearResult = false;
+            }
 
+            public String findValueInBraces(String finalStr) {
+
+                while (finalStr.contains("(") && finalStr.contains(")")) {
+                    int fIndex = finalStr.indexOf("(");
+                    int nIndex = finalStr.indexOf(")");
+                    String subString = finalStr.substring(fIndex + 1, nIndex);
+                    finalStr = finalStr.substring(0, fIndex)
+                            + calculate(subString)
+                            + finalStr.substring(nIndex + 1,
+                            finalStr.length());
+                }
+                return calculate(finalStr);
 
             }
-        });
 
+            public String calculate(String finalString) {
 
-        minusValue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                while (finalString.contains("(") && finalString.contains(")")) {
+                    findValueInBraces(finalString);
+                }
+                while (!isNum(finalString)) {
+                    List<Integer> positions = getOperandPosition(finalString);
+                    int pos = positions.get(0);
+                    if (positions.size() >= 2 && positions.get(1) != null) {
+                        int nxtPos = positions.get(1);
+                        finalString = getValue(finalString.substring(0, nxtPos), pos)
+                                + finalString.substring(nxtPos, finalString.length());
+                    } else {
+                        finalString = getValue(
+                                finalString.substring(0, finalString.length()), pos);
+                    }
+                }
+                return finalString;
 
             }
+
+            public boolean isNum(String str) {
+                if (str.contains("+") || str.contains("-") || str.contains("*")
+                        || str.contains("/")) {
+                    return false;
+                }
+                return true;
+            }
+
+            public List<Integer> getOperandPosition(String str) {
+
+                List<Integer> integers = new ArrayList<Integer>();
+
+                if (str.contains("+")) {
+                    integers.add(str.indexOf("+"));
+                }
+
+                if (str.contains("-")) {
+                    integers.add(str.indexOf("-"));
+                }
+
+                if (str.contains("*")) {
+                    integers.add(str.indexOf("*"));
+                }
+
+                if (str.contains("/")) {
+                    integers.add(str.indexOf("/"));
+                }
+
+                Collections.sort(integers);
+                return integers;
+            }
+
+            public String getValue(String str, int pos) {
+                double finalVal = 0;
+                double a = Double.parseDouble(str.substring(0, pos));
+                double b = Double.parseDouble(str.substring(pos + 1, str.length()));
+                char c = str.charAt(pos);
+
+                if (c == '*') {
+                    finalVal = a * b;
+                } else if (c == '/') {
+                    finalVal = a / b;
+                } else if (c == '+') {
+                    finalVal = a + b;
+                } else if (c == '-') {
+                    finalVal = a - b;
+                }
+                return String.valueOf(finalVal);
+            }
+
+
         });
+
 
         one.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "1");
 
@@ -154,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
         two.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "2");
 
@@ -163,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
         three.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "3");
 
@@ -172,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
         four.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "4");
 
@@ -181,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
         five.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "5");
 
@@ -191,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
         six.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "6");
 
@@ -201,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
         seven.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "7");
 
@@ -210,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
         eight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "8");
 
@@ -219,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
         nine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "9");
 
@@ -228,6 +334,8 @@ public class MainActivity extends AppCompatActivity {
         point.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
+
 
                 textView.setText(textView.getText() + ".");
 
@@ -237,6 +345,7 @@ public class MainActivity extends AppCompatActivity {
         zero.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "0");
 
