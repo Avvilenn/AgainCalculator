@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
 
             public boolean isNum(String str) {
                 if (str.contains("+") || str.contains("-") || str.contains("*")
-                        || str.contains("/")) {
+                        || str.contains("/") || str.contains("%")) {
                     return false;
                 }
                 return true;
@@ -260,6 +260,9 @@ public class MainActivity extends AppCompatActivity {
                 if (str.contains("/")) {
                     integers.add(str.indexOf("/"));
                 }
+                if (str.contains("%")) {
+                    integers.add(str.indexOf("%"));
+                }
 
                 Collections.sort(integers);
                 return integers;
@@ -279,7 +282,19 @@ public class MainActivity extends AppCompatActivity {
                     finalVal = a + b;
                 } else if (c == '-') {
                     finalVal = a - b;
-                }
+
+                }else if (c == '%') {
+                    pos --;
+                    if (c == '*') {
+                        finalVal = a/100*b;
+                    } else if (c == '+') {
+                        finalVal = a + a/100*b;
+                    } else if (c == '-') {
+                        finalVal = a - a/100*b;
+
+                    }
+
+                    }
                 return String.valueOf(finalVal);
             }
 
