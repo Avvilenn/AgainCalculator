@@ -16,9 +16,11 @@ public class MainActivity extends AppCompatActivity {
 
     Button clear, bracketRight, bracketLeft, percentage, divide, add, subtract, multiply, equal;
 
-    Button one, two, three, four, five, six, seven, eight, nine, point, zero ;
+    Button one, two, three, four, five, six, seven, eight, nine, point, zero, delete ;
 
     Boolean clearResult = true;
+    Boolean doubleMathActionBug = true;
+    Boolean doubleDotBug = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         subtract = (Button)findViewById(R.id.buttonSubtraction);
         multiply = (Button)findViewById(R.id.buttonMultiply);
         equal = (Button)findViewById(R.id.buttonEqual);
+        delete = (Button)findViewById(R.id.buttonDelete);
 
 
         one = (Button)findViewById(R.id.button1);
@@ -61,6 +64,22 @@ public class MainActivity extends AppCompatActivity {
 
                 textView.setText(null);
                 result.setText(null);
+                doubleMathActionBug = false;
+                doubleDotBug = true;
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick (View view){
+                String backspace = null;
+                if (textView.getText().length()>0){
+                    StringBuilder strB = new StringBuilder(textView.getText());
+                    strB.deleteCharAt(textView.getText().length()-1);
+                    backspace = strB.toString();
+                    textView.setText(backspace);
+
+                }
             }
         });
 
@@ -72,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
                 textView.setText(textView.getText() + ")");
 
+
             }
         });
 
@@ -81,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
                 if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "(");
+                doubleMathActionBug = false;
+
 
             }
         });
@@ -101,7 +123,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(!clearResult)result.setText(null);
 
-                textView.setText(textView.getText() + "/");
+                if (!doubleMathActionBug){
+                    textView.setText(textView.getText() + "");}
+                else {
+                    textView.setText(textView.getText() + "/");
+                    doubleMathActionBug = false;
+                    doubleDotBug = true;
+                }
+
 
             }
         });
@@ -111,8 +140,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!clearResult)result.setText(null);
+                if (!doubleMathActionBug){
+                    textView.setText(textView.getText() + "");}
+                else {
+                    textView.setText(textView.getText() + "+");
+                    doubleMathActionBug = false;
+                    doubleDotBug = true;
+                }
 
-                textView.setText(textView.getText() + "+");
             }
         });
 
@@ -121,8 +156,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!clearResult)result.setText(null);
+                if (!doubleMathActionBug){
+                    textView.setText(textView.getText() + "");}
+                else {
+                    textView.setText(textView.getText() + "-");
+                    doubleMathActionBug = false;
+                    doubleDotBug = true;
+                }
 
-                textView.setText(textView.getText() + "-");
 
             }
         });
@@ -132,8 +173,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!clearResult)result.setText(null);
-
-                textView.setText(textView.getText() + "*");
+                if (!doubleMathActionBug){
+                    textView.setText(textView.getText() + "");}
+                else {
+                    textView.setText(textView.getText() + "*");
+                    doubleMathActionBug = false;
+                    doubleDotBug = true;
+                }
 
             }
         });
@@ -147,6 +193,8 @@ public class MainActivity extends AppCompatActivity {
                 result.setText(findValueInBraces(orgString));
                 textView.setText(null);
                 clearResult = false;
+                doubleMathActionBug = false;
+                doubleDotBug = true;
             }
 
             public String findValueInBraces(String finalStr) {
@@ -245,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "1");
+                doubleMathActionBug = true;
 
             }
         });
@@ -255,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "2");
+                doubleMathActionBug = true;
 
             }
         });
@@ -265,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "3");
+                doubleMathActionBug = true;
 
             }
         });
@@ -275,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "4");
+                doubleMathActionBug = true;
 
             }
         });
@@ -285,6 +337,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "5");
+                doubleMathActionBug = true;
 
             }
         });
@@ -296,6 +349,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "6");
+                doubleMathActionBug = true;
 
             }
         });
@@ -307,6 +361,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "7");
+                doubleMathActionBug = true;
 
             }
         });
@@ -317,6 +372,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "8");
+                doubleMathActionBug = true;
 
             }
         });
@@ -327,6 +383,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "9");
+                doubleMathActionBug = true;
 
             }
         });
@@ -335,9 +392,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!clearResult)result.setText(null);
+                if (doubleDotBug){
+                    textView.setText(textView.getText() + ".");
+                    doubleMathActionBug = false;
+                    doubleDotBug = false;
+                }else {
+                    textView.setText(textView.getText() + "");
+                }
 
 
-                textView.setText(textView.getText() + ".");
 
             }
         });
@@ -348,6 +411,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!clearResult)result.setText(null);
 
                 textView.setText(textView.getText() + "0");
+                doubleMathActionBug = true;
 
             }
         });
