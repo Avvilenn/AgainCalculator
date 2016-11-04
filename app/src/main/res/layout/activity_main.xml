@@ -50,11 +50,25 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:background="@null"
-            android:gravity="right"
-            android:layout_span="4"
+            android:layout_span="3"
             android:textSize="40dp"
             android:typeface="monospace"
             android:textColor="#e502b8"
+
+            android:singleLine="true"
+            android:nestedScrollingEnabled="false" />
+
+        <Button
+            android:id="@+id/buttonDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text=">>"
+            android:textSize="35dp"
+            android:background="#ECEFF1"
+            android:textColor="#ff00cc"
+            android:layout_span="1"
+            android:typeface="monospace"
+            android:layout_marginRight="1dp"
 
             />
 
@@ -117,7 +131,7 @@
             android:textColor="#ff00cc"
             android:layout_span="1"
             android:typeface="monospace"
-            android:layout_marginRight="1dp"
+            android:layout_marginTop="1dp"
 
             />
 
