@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         point = (Button)findViewById(R.id.buttonPoint);
         zero = (Button)findViewById(R.id.buttonZero);
 
+
+
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -188,9 +190,11 @@ public class MainActivity extends AppCompatActivity {
         equal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Parser p = new ArityParser();
                 String orgString = textView.getText().toString();
+                result.setText(p.parse(orgString));
 
-                result.setText(findValueInBraces(orgString));
+                //result.setText(findValueInBraces(orgString));
                 textView.setText(null);
                 clearResult = false;
                 doubleMathActionBug = false;

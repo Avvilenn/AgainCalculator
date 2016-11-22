@@ -70,6 +70,7 @@
             android:typeface="monospace"
             android:layout_marginRight="1dp"
 
+
             />
 
 
@@ -233,7 +234,8 @@
             android:layout_span="1"
             android:typeface="monospace"
             android:layout_marginRight="1dp"
-            android:layout_marginTop="1dp"/>
+            android:layout_marginTop="1dp"
+            />
 
         <Button
             android:id="@+id/button6"
