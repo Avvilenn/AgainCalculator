@@ -202,16 +202,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //Parser p = new ArityParser();
+
                 String orgString = textView.getText().toString();
-                //result.setText(p.parse(orgString));
+
                 try {
                     result.setText(ReversePolishNotation.calculateExpression(orgString).toString());
                 } catch (NullPointerException e) {
-                    result.setText("деление на ноль!!!");
+                    result.setText("/0!!!");
                 }
 
-                //result.setText(findValueInBraces(orgString));
+
                 textView.setText(null);
                 clearResult = false;
                 doubleMathActionBug = false;
